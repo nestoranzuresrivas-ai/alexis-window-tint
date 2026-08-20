@@ -8,8 +8,8 @@ const prefersReducedMotion = window.matchMedia(
 ).matches;
 
 if (!prefersReducedMotion) {
-  const ease = [0.17, 0.55, 0.55, 1];
-  const revealMargin = { margin: "0px 0px -10% 0px" };
+  const ease = [0.16, 0.9, 0.3, 1];
+  const revealMargin = { margin: "0px 0px -12% 0px" };
 
   // --- Single-element reveals: section headings, pricing tables, contact cards ---
   const singleSelector = "main .section h2, .pricing-table-wrap, .contact-grid > .card";
@@ -17,34 +17,33 @@ if (!prefersReducedMotion) {
 
   singleEls.forEach((el) => {
     el.style.opacity = "0";
-    el.style.transform = "translateY(20px)";
+    el.style.transform = "translateY(40px)";
   });
 
   if (singleEls.length) {
     inView(
       singleSelector,
       (element) => {
-        animate(element, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, ease });
+        animate(element, { opacity: [0, 1], y: [40, 0] }, { duration: 0.7, ease });
       },
       revealMargin
     );
   }
 
-  // --- Staggered group reveals: card grids, trust bar, gallery grid ---
-  const groups = [
-    { group: ".card-grid", items: ".card" },
+  // --- Staggered vertical-rise reveals: trust bar, gallery grid ---
+  const verticalGroups = [
     { group: ".trust-bar", items: ".trust-item" },
     { group: ".gallery-grid", items: ".gallery-placeholder" },
   ];
 
-  groups.forEach(({ group, items }) => {
+  verticalGroups.forEach(({ group, items }) => {
     document.querySelectorAll(group).forEach((groupEl) => {
       const children = groupEl.querySelectorAll(items);
       if (!children.length) return;
 
       children.forEach((child) => {
         child.style.opacity = "0";
-        child.style.transform = "translateY(16px)";
+        child.style.transform = "translateY(32px)";
       });
 
       inView(
@@ -52,8 +51,8 @@ if (!prefersReducedMotion) {
         () => {
           animate(
             children,
-            { opacity: [0, 1], y: [16, 0] },
-            { delay: stagger(0.08), duration: 0.5, ease }
+            { opacity: [0, 1], y: [32, 0] },
+            { delay: stagger(0.12), duration: 0.6, ease }
           );
         },
         revealMargin
@@ -61,20 +60,58 @@ if (!prefersReducedMotion) {
     });
   });
 
-  // --- Subtle spring hover on primary buttons ---
+  // --- Card grids: alternating slide-in from left/right, more noticeable than a plain fade ---
+  document.querySelectorAll(".card-grid").forEach((groupEl) => {
+    const cards = groupEl.querySelectorAll(".card");
+    if (!cards.length) return;
+
+    cards.forEach((card, i) => {
+      const fromX = i % 2 === 0 ? -60 : 60;
+      card.style.opacity = "0";
+      card.style.transform = `translate(${fromX}px, 24px)`;
+      card.dataset.fromX = String(fromX);
+    });
+
+    inView(
+      groupEl,
+      () => {
+        cards.forEach((card, i) => {
+          const fromX = Number(card.dataset.fromX);
+          animate(
+            card,
+            { opacity: [0, 1], x: [fromX, 0], y: [24, 0] },
+            { delay: i * 0.12, duration: 0.65, ease }
+          );
+        });
+      },
+      revealMargin
+    );
+  });
+
+  // --- Noticeable spring hover on primary buttons ---
   document.querySelectorAll(".btn-accent").forEach((btn) => {
     btn.addEventListener("pointerenter", () => {
-      animate(btn, { scale: 1.035 }, { type: "spring", bounce: 0.35, visualDuration: 0.25 });
+      animate(btn, { scale: 1.08 }, { type: "spring", bounce: 0.45, visualDuration: 0.3 });
     });
     btn.addEventListener("pointerleave", () => {
-      animate(btn, { scale: 1 }, { type: "spring", bounce: 0.35, visualDuration: 0.25 });
+      animate(btn, { scale: 1 }, { type: "spring", bounce: 0.45, visualDuration: 0.3 });
     });
     // Keyboard focus gets the same treatment so the effect isn't mouse-only.
     btn.addEventListener("focusin", () => {
-      animate(btn, { scale: 1.035 }, { type: "spring", bounce: 0.35, visualDuration: 0.25 });
+      animate(btn, { scale: 1.08 }, { type: "spring", bounce: 0.45, visualDuration: 0.3 });
     });
     btn.addEventListener("focusout", () => {
-      animate(btn, { scale: 1 }, { type: "spring", bounce: 0.35, visualDuration: 0.25 });
+      animate(btn, { scale: 1 }, { type: "spring", bounce: 0.45, visualDuration: 0.3 });
+    });
+  });
+
+  // --- Noticeable hover lift on cards (adds to the existing CSS shadow/lift) ---
+  document.querySelectorAll(".card, .trust-item").forEach((card) => {
+    card.addEventListener("pointerenter", () => {
+      animate(card, { y: [0, -8] }, { type: "spring", bounce: 0.4, visualDuration: 0.3 });
+    });
+    card.addEventListener("pointerleave", () => {
+      animate(card, { y: [-8, 0] }, { type: "spring", bounce: 0.4, visualDuration: 0.3 });
     });
   });
 }
