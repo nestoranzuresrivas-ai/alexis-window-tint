@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-08-20T22:29:15.796Z",
+        "reason": "user confirmed: keeping Inter for the Alexis Window Tint site, prioritizing legibility/professionalism over distinctiveness"
+      }
+    ]
+  }
+}
