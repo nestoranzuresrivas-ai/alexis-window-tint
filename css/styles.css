@@ -148,6 +148,20 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .hero p.lede { color: var(--color-text-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.1rem; }
 .hero .btn { margin-top: var(--space-4); margin-inline: var(--space-1); }
 
+/* ---- Hero load-in (pure CSS, no JS dependency; skipped entirely for reduced motion) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fade-up-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero h1, .hero .lede, .hero .btn {
+    animation: fade-up-in 1000ms linear(0, 0.0319, 0.1092, 0.2105, 0.3209, 0.4305, 0.5332, 0.6253, 0.7055, 0.7733, 0.8294, 0.8747, 0.9107, 0.9386, 0.9597, 0.9754, 0.9868, 0.9947, 1, 1.0033, 1.0052, 1.0061, 1.0063, 1.006, 1.0055, 1.0049, 1.0042, 1.0035, 1.0029, 1.0023, 1.0018, 1.0014, 1) both;
+  }
+  .hero .lede { animation-delay: 0.08s; }
+  .hero .btn { animation-delay: 0.16s; }
+  .hero .btn:nth-of-type(2) { animation-delay: 0.24s; }
+}
+
 /* ---- Contact page ---- */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); align-items: start; }
 .contact-grid .card p { margin-bottom: var(--space-2); }

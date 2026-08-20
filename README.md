@@ -16,16 +16,32 @@ No build step needed. Either:
 ## Structure
 
 ```
-index.html       Home
-services.html    Services & film types
-pricing.html     Full pricing tables
-gallery.html     Photo gallery (placeholder for now)
-about.html       Experience + reviews
-contact.html     Address, phone, email, hours, map
-css/styles.css   All styles + design tokens (colors, fonts, spacing)
-js/script.js     Mobile nav toggle (+ any future scroll/hover polish)
-images/          Photo assets go here
+index.html          Home
+services.html       Services & film types
+pricing.html        Full pricing tables
+gallery.html        Photo gallery (placeholder for now)
+about.html          Experience + reviews
+contact.html        Address, phone, email, hours, map
+css/styles.css      All styles + design tokens (colors, fonts, spacing)
+js/script.js        Mobile nav toggle
+js/animations.js    Scroll reveals + button hover spring (built on Motion)
+js/vendor/motion.js Vendored copy of the Motion animation library (motion.dev)
+images/             Photo assets go here
 ```
+
+### Animations
+
+`js/animations.js` adds subtle scroll-triggered fade/rise reveals and a
+small spring "pop" on the primary call-to-action buttons, using the
+[Motion](https://motion.dev) library. Motion is vendored locally as a
+single file at `js/vendor/motion.js` rather than fetched from a CDN, so
+the site has no runtime network dependency and no build step. To
+upgrade it, replace that file with a fresh build from
+`https://cdn.jsdelivr.net/npm/motion@<version>/+esm`.
+
+Everything in `animations.js` checks `prefers-reduced-motion` first and
+does nothing if the visitor has that preference set — content is always
+fully visible without it.
 
 There's no templating system — each `.html` file repeats the same
 header/nav and footer markup. When you change something shared (a
