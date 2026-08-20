@@ -52,6 +52,24 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .section { padding-block: var(--space-6); }
 .section-alt { background: var(--color-bg-alt); }
 
+/* ---- Utilities ---- */
+.text-center { text-align: center; }
+.text-center .lede { margin-inline: auto; }
+
+/* ---- Skip link ---- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-2);
+  background: var(--color-accent);
+  color: #fff;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius);
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: var(--space-2); }
+
 /* ---- Buttons ---- */
 .btn {
   display: inline-block;
@@ -71,7 +89,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .logo { font-family: var(--font-heading); font-weight: 600; font-size: 1.25rem; color: var(--color-primary); }
 .logo-accent { color: var(--color-accent); }
 
-.nav-toggle { display: none; flex-direction: column; gap: 4px; background: none; border: none; padding: var(--space-1); }
+.nav-toggle { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 44px; min-height: 44px; background: none; border: none; }
 .nav-toggle span { width: 22px; height: 2px; background: var(--color-primary); display: block; }
 
 .site-nav { display: flex; gap: var(--space-3); }
@@ -103,6 +121,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-3); }
 .card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); box-shadow: var(--shadow-sm); transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.card h2:not(:first-child), .card h3:not(:first-child) { margin-top: var(--space-3); }
 
 /* ---- Pricing table ---- */
 .pricing-table { width: 100%; border-collapse: collapse; background: var(--color-bg); box-shadow: var(--shadow-sm); border-radius: var(--radius); overflow: hidden; }
@@ -132,6 +151,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 /* ---- Contact page ---- */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); align-items: start; }
 .contact-grid .card p { margin-bottom: var(--space-2); }
+.map-embed { border: 0; border-radius: var(--radius); }
 @media (max-width: 700px) {
   .contact-grid { grid-template-columns: 1fr; }
 }

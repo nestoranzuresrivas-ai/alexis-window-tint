@@ -10,13 +10,14 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">Alexis <span class="logo-accent">Window Tint</span></a>
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
-    <nav class="site-nav" id="siteNav">
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
       <a href="index.html">Home</a>
       <a href="services.html">Services</a>
       <a href="pricing.html">Pricing</a>
@@ -28,7 +29,7 @@
   </div>
 </header>
 
-<main>
+<main id="main">
 
 <section class="section">
   <div class="container">
@@ -37,20 +38,21 @@
 
     <div class="contact-grid">
       <div class="card">
-        <h3>Get in Touch</h3>
+        <h2>Get in Touch</h2>
         <p><strong>Phone:</strong> <a href="tel:19035030115">(903) 503-0115</a></p>
         <p><strong>Email:</strong> <a href="mailto:alexiswindowtint@gmail.com">alexiswindowtint@gmail.com</a></p>
         <p><strong>Address:</strong> 1002 Valley Dr, Corsicana, TX 75110</p>
-        <h3 style="margin-top: var(--space-3);">Hours</h3>
+        <h2>Hours</h2>
         <p>Mon&ndash;Fri: 9am&ndash;5pm</p>
         <p>Sat: 9am&ndash;2pm</p>
         <p>Sun: Closed</p>
       </div>
       <div class="card">
         <iframe
+          class="map-embed"
           title="Alexis Window Tint location"
           src="https://www.google.com/maps?q=1002+Valley+Dr,+Corsicana,+TX+75110&output=embed"
-          width="100%" height="360" style="border:0; border-radius: var(--radius);"
+          width="100%" height="360"
           loading="lazy" referrerpolicy="no-referrer-when-downgrade">
         </iframe>
       </div>
