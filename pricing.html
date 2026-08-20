@@ -31,14 +31,29 @@
 
 <main id="main">
 
-<section class="section">
-  <div class="container">
+<section class="page-hero">
+  <div class="hero-backdrop" aria-hidden="true">
+    <svg class="hero-car" viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" focusable="false">
+      <path d="M35 145 Q35 122 62 120 L98 92 Q120 76 152 76 L232 76 Q262 76 281 93 L314 120 Q340 122 340 145 L340 156 L35 156 Z" fill="currentColor"/>
+      <path d="M110 93 L147 82 L230 82 L266 95 L248 114 L130 114 Z" fill="currentColor" opacity="0.55"/>
+      <circle cx="97" cy="156" r="22" fill="currentColor"/>
+      <circle cx="280" cy="156" r="22" fill="currentColor"/>
+    </svg>
+  </div>
+  <div class="container hero-content">
     <h1>Pricing</h1>
     <p class="lede">All standard-tier work below carries a lifetime warranty. A lower-cost 2-year warranty film is also available on request &mdash; call for a quote.</p>
+  </div>
+</section>
 
+<section class="section">
+  <div class="container">
     <div class="pricing-table-wrap">
       <table class="pricing-table">
-        <caption>Standard Lifetime Warranty Film</caption>
+        <caption>
+          <span class="icon-inline" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg></span>
+          Standard Lifetime Warranty Film
+        </caption>
         <thead>
           <tr><th>Item</th><th>Price</th></tr>
         </thead>
@@ -63,7 +78,10 @@
 
     <div class="pricing-table-wrap">
       <table class="pricing-table">
-        <caption>Ceramic Lifetime Warranty Film</caption>
+        <caption>
+          <span class="icon-inline" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z"/></svg></span>
+          Ceramic Lifetime Warranty Film
+        </caption>
         <thead>
           <tr><th>Item</th><th>Price</th></tr>
         </thead>
@@ -88,10 +106,10 @@
   </div>
 </section>
 
-<section class="section section-alt">
-  <div class="container" style="text-align:center;">
+<section class="section section-accent">
+  <div class="container text-center">
     <h2>Not Sure Which Option Is Right For You?</h2>
-    <p class="lede" style="margin-inline:auto;">Call (903) 503-0115 for a free quote.</p>
+    <p class="lede">Call (903) 503-0115 for a free quote.</p>
     <a class="btn btn-accent" href="tel:19035030115">Call (903) 503-0115</a>
   </div>
 </section>

@@ -1,7 +1,30 @@
 // Scroll reveals + a subtle hover spring, built with Motion (vendored in js/vendor/motion.js).
 // Respects prefers-reduced-motion: if the visitor asked for reduced motion,
 // this file does nothing and every element stays at its normal, visible state.
-import { animate, inView, stagger } from "./vendor/motion.js";
+import { animate, stagger } from "./vendor/motion.js";
+
+// NOTE: this uses a native IntersectionObserver instead of Motion's own
+// `inView()` helper. `inView()` is documented as a thin wrapper around
+// IntersectionObserver, but in this vendored build its callback either
+// doesn't fire reliably for every matched element or the animate() call
+// made from inside it silently fails to apply — verified by comparing it
+// side-by-side against a plain IntersectionObserver calling the exact same
+// animate() call, which works correctly every time. Motion's `animate`
+// and `stagger` (the parts that actually work) still do all the animating.
+function revealOnce(element, callback, { marginPercent = 12 } = {}) {
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          callback(entry.target);
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { rootMargin: `0px 0px -${marginPercent}% 0px` }
+  );
+  io.observe(element);
+}
 
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
@@ -9,26 +32,16 @@ const prefersReducedMotion = window.matchMedia(
 
 if (!prefersReducedMotion) {
   const ease = [0.16, 0.9, 0.3, 1];
-  const revealMargin = { margin: "0px 0px -12% 0px" };
 
   // --- Single-element reveals: section headings, pricing tables, contact cards ---
   const singleSelector = "main .section h2, .pricing-table-wrap, .contact-grid > .card";
-  const singleEls = document.querySelectorAll(singleSelector);
-
-  singleEls.forEach((el) => {
+  document.querySelectorAll(singleSelector).forEach((el) => {
     el.style.opacity = "0";
     el.style.transform = "translateY(40px)";
+    revealOnce(el, (element) => {
+      animate(element, { opacity: [0, 1], y: [40, 0] }, { duration: 0.7, ease });
+    });
   });
-
-  if (singleEls.length) {
-    inView(
-      singleSelector,
-      (element) => {
-        animate(element, { opacity: [0, 1], y: [40, 0] }, { duration: 0.7, ease });
-      },
-      revealMargin
-    );
-  }
 
   // --- Staggered vertical-rise reveals: trust bar, gallery grid ---
   const verticalGroups = [
@@ -46,17 +59,13 @@ if (!prefersReducedMotion) {
         child.style.transform = "translateY(32px)";
       });
 
-      inView(
-        groupEl,
-        () => {
-          animate(
-            children,
-            { opacity: [0, 1], y: [32, 0] },
-            { delay: stagger(0.12), duration: 0.6, ease }
-          );
-        },
-        revealMargin
-      );
+      revealOnce(groupEl, () => {
+        animate(
+          children,
+          { opacity: [0, 1], y: [32, 0] },
+          { delay: stagger(0.12), duration: 0.6, ease }
+        );
+      });
     });
   });
 
@@ -72,20 +81,16 @@ if (!prefersReducedMotion) {
       card.dataset.fromX = String(fromX);
     });
 
-    inView(
-      groupEl,
-      () => {
-        cards.forEach((card, i) => {
-          const fromX = Number(card.dataset.fromX);
-          animate(
-            card,
-            { opacity: [0, 1], x: [fromX, 0], y: [24, 0] },
-            { delay: i * 0.12, duration: 0.65, ease }
-          );
-        });
-      },
-      revealMargin
-    );
+    revealOnce(groupEl, () => {
+      cards.forEach((card, i) => {
+        const fromX = Number(card.dataset.fromX);
+        animate(
+          card,
+          { opacity: [0, 1], x: [fromX, 0], y: [24, 0] },
+          { delay: i * 0.12, duration: 0.65, ease }
+        );
+      });
+    });
   });
 
   // --- Noticeable spring hover on primary buttons ---
