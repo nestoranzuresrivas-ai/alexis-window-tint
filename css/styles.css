@@ -32,6 +32,15 @@
   --color-on-dark: #dbe4f0;
   --color-on-dark-muted: #b9c6dc;
   --color-accent-soft: rgba(37, 99, 235, 0.12);
+
+  /* Tint-darkness swatch scale (services.html) — dark-navy to near-white,
+     same hue family as --color-primary so the reference stays on-brand
+     instead of reading as plain neutral gray. */
+  --tint-5: var(--color-primary-dark);
+  --tint-20: #3c5170;
+  --tint-35: #7f8c9c;
+  --tint-50: #c0c8d2;
+  --tint-70: #eef1f5;
 }
 
 /* ---- Reset ---- */
@@ -219,8 +228,32 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .pricing-table td:last-child, .pricing-table th:last-child { text-align: right; font-weight: 600; }
 .pricing-table-wrap { overflow-x: auto; margin-bottom: var(--space-5); }
 
-/* ---- Tint shade reference graphic ---- */
-.tint-shade-graphic { width: 100%; max-width: 720px; margin: var(--space-4) auto 0; border-radius: var(--radius); box-shadow: var(--shadow-md); }
+/* ---- Tint shade reference (CSS swatches, no photo dependency) ---- */
+.tint-shade-card {
+  max-width: 640px;
+  margin: var(--space-4) auto 0;
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+.tint-swatches { display: flex; justify-content: center; gap: var(--space-3); flex-wrap: wrap; }
+.tint-swatch { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); flex: 1 1 80px; max-width: 120px; }
+.tint-swatch-color {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: calc(var(--radius) - 2px);
+  /* Hairline ring so the lightest swatch stays visible against the card's
+     own near-white background. */
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+.tint-swatch-color[data-pct="5"] { background: var(--tint-5); }
+.tint-swatch-color[data-pct="20"] { background: var(--tint-20); }
+.tint-swatch-color[data-pct="35"] { background: var(--tint-35); }
+.tint-swatch-color[data-pct="50"] { background: var(--tint-50); }
+.tint-swatch-color[data-pct="70"] { background: var(--tint-70); }
+.tint-swatch-label { font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 1rem; }
 .tint-shade-cta { margin-top: var(--space-4); }
 
 /* ---- Gallery ---- */

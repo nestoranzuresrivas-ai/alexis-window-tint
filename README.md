@@ -109,11 +109,13 @@ navy/blue wordmark instead of dominating the header. `alt=""` because
 the adjacent text already names the business — update it if the badge
 is ever used somewhere without that text nearby.
 
-## The tint-shade graphic
+## The tint-shade reference
 
-`services.html` has a "How Dark Should You Go?" section using
-`images/tint-percentages.png` (cropped from the client's promo flyer)
-as a visual 5/20/35/50/70% shade reference instead of a plain text
-list. The `.tint-shade-graphic` class (in `css/styles.css`) handles
-the sizing and rounded corner if you swap in a different image or add
-the same section to `pricing.html`.
+`services.html` has a "How Dark Should You Go?" section showing a
+5/20/35/50/70% shade reference as plain CSS swatches (`.tint-shade-card`
+/ `.tint-swatches` in `css/styles.css`) — no image file involved. Each
+swatch's color comes from the `--tint-5` … `--tint-70` custom
+properties in the `:root` token block, running dark navy (5%, darkest)
+to near-white (70%, lightest) so it stays on-brand instead of plain
+gray. To change a shade, edit its token; to add the same section to
+`pricing.html`, copy the `.tint-shade-card` block from `services.html`.
