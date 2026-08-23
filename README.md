@@ -19,7 +19,7 @@ No build step needed. Either:
 index.html          Home
 services.html       Services & film types
 pricing.html        Full pricing tables
-gallery.html        Photo gallery (placeholder for now)
+gallery.html        Photo gallery (3 real jobs + placeholders)
 about.html          Experience + reviews
 contact.html        Address, phone, email, hours, map
 css/styles.css      All styles + design tokens (colors, fonts, spacing)
@@ -56,16 +56,22 @@ any of these change.
 
 ## Adding real photos to the gallery
 
-`gallery.html` currently has six `.gallery-placeholder` `<div>`s with
-the text "Photos coming soon". To add a real photo:
+`gallery.html` has a `.gallery-grid` of six cells: three real photos
+(pool enclosure, GMC truck, orange tractor — cropped from the client's
+promo flyer) and three `.gallery-placeholder` `<div>`s still reading
+"Photos coming soon". To add another real photo, replace one of the
+remaining placeholders with a `.gallery-photo` figure:
 
-1. Drop the image file into `images/` (e.g. `images/sedan-front.jpg`).
-2. Replace one of the `.gallery-placeholder` divs with:
-   ```html
-   <img src="images/sedan-front.jpg" alt="Describe the photo here" class="gallery-placeholder" style="object-fit: cover;">
-   ```
-   (or restyle as you like — the `.gallery-grid` class handles the
-   grid layout regardless of what's inside each cell).
+```html
+<figure class="gallery-photo">
+  <img src="images/sedan-front.jpg" alt="Describe the photo here" loading="lazy" width="270" height="195">
+  <figcaption>Category &mdash; Short Label</figcaption>
+</figure>
+```
+
+`.gallery-photo` crops the image to the same 4:3 footprint as the
+placeholder tiles (`object-fit: cover`) and shows the figcaption as a
+dark gradient overlay along the bottom edge — no extra styling needed.
 
 ## Updating pricing
 
@@ -85,17 +91,29 @@ Replace `href="#"` with the real Facebook page URL (you can leave the
 `data-placeholder` attribute or remove it — it's just there so this
 spot is easy to find with a search).
 
-## Adding a real logo
+## The real logo
 
-Every page's header has this text-based logo markup:
-
-```html
-<a class="logo" href="index.html">Alexis <span class="logo-accent">Window Tint</span></a>
-```
-
-To use an image logo instead, replace it (in all six files) with
-something like:
+Every page's header and footer show the real logo badge
+(`images/logo-mark.png`, cropped from the client's circular emblem —
+arc, stars, sunburst, and car, with the "ALEXIS WINDOW TINT" wordmark
+and knife graphic cropped off) next to the text wordmark:
 
 ```html
-<a class="logo" href="index.html"><img src="images/logo.png" alt="Alexis Window Tint" style="height: 40px;"></a>
+<a class="logo" href="index.html"><img class="logo-mark" src="images/logo-mark.png" alt="" width="61" height="34">Alexis <span class="logo-accent">Window Tint</span></a>
 ```
+
+`.logo-mark` (in `css/styles.css`) fixes its height at 34px with a
+small rounded corner and hairline ring, so the badge's busier
+black/orange/gold artwork stays contained next to the site's own
+navy/blue wordmark instead of dominating the header. `alt=""` because
+the adjacent text already names the business — update it if the badge
+is ever used somewhere without that text nearby.
+
+## The tint-shade graphic
+
+`services.html` has a "How Dark Should You Go?" section using
+`images/tint-percentages.png` (cropped from the client's promo flyer)
+as a visual 5/20/35/50/70% shade reference instead of a plain text
+list. The `.tint-shade-graphic` class (in `css/styles.css`) handles
+the sizing and rounded corner if you swap in a different image or add
+the same section to `pricing.html`.

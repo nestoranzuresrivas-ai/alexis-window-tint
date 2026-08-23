@@ -105,6 +105,21 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .logo { font-family: var(--font-heading); font-weight: 600; font-size: 1.25rem; color: var(--color-primary); }
 .logo-accent { color: var(--color-accent); }
 
+/* Real logo badge — kept small and self-contained (own rounded corner + ring)
+   so its busier black/orange/gold artwork reads as a fixed-size mark next to
+   the site's own navy/blue wordmark, rather than bleeding into the palette.
+   Plain inline flow (not flex) so the wordmark still wraps normally at word
+   boundaries in the narrow footer columns instead of splitting mid-word. */
+.logo-mark {
+  height: 34px;
+  width: auto;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08), var(--shadow-sm);
+}
+.footer-logo .logo-mark { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
+
 .nav-toggle { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 44px; min-height: 44px; background: none; border: none; }
 .nav-toggle span { width: 22px; height: 2px; background: var(--color-primary); display: block; }
 
@@ -204,10 +219,30 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .pricing-table td:last-child, .pricing-table th:last-child { text-align: right; font-weight: 600; }
 .pricing-table-wrap { overflow-x: auto; margin-bottom: var(--space-5); }
 
+/* ---- Tint shade reference graphic ---- */
+.tint-shade-graphic { width: 100%; max-width: 720px; margin: var(--space-4) auto 0; border-radius: var(--radius); box-shadow: var(--shadow-md); }
+.tint-shade-cta { margin-top: var(--space-4); }
+
 /* ---- Gallery ---- */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-3); }
 .gallery-placeholder { aspect-ratio: 4 / 3; background: var(--color-bg-alt); border: 1px dashed var(--color-border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.9rem; text-align: center; padding: var(--space-2); }
 .gallery-placeholder .icon-badge { margin-bottom: var(--space-1); }
+
+/* Real work photos — same 4:3 footprint as the placeholder tiles so the two
+   mix in one grid; caption sits in a navy (brand, not photo-color) gradient
+   so busier photo content stays contained behind readable white text. */
+.gallery-photo { position: relative; aspect-ratio: 4 / 3; margin: 0; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.gallery-photo:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.gallery-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-photo figcaption {
+  position: absolute; inset: auto 0 0 0;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  background: linear-gradient(to top, rgba(20, 42, 69, 0.88), rgba(20, 42, 69, 0));
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
 
 /* ---- Footer ---- */
 .site-footer { background: var(--color-primary); color: var(--color-on-dark); margin-top: var(--space-7); }
