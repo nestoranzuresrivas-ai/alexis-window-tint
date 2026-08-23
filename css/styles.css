@@ -83,7 +83,15 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .container { max-width: var(--container-width); margin-inline: auto; padding-inline: var(--space-3); }
 
 .section { padding-block: var(--space-6); }
-.section-alt { background: var(--color-bg-alt); }
+/* Soft top/bottom fade instead of a hard color-block cut into the
+   neighboring white section, plus the same fine grain used in the hero
+   (baked into the SVG at low alpha so it layers under the fade cleanly). */
+.section-alt {
+  background-color: var(--color-bg-alt);
+  background-image:
+    linear-gradient(180deg, var(--color-bg) 0%, transparent 10%, transparent 90%, var(--color-bg) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
 
 /* ---- Utilities ---- */
 .text-center { text-align: center; }
@@ -364,18 +372,51 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   color: var(--color-on-dark);
   text-align: center;
 }
-/* Diagonal stripe motif, evoking layered tint film, low-opacity over the gradient */
+/* Diagonal stripe motif (layered tint film) plus a soft light-beam sweep
+   crossing it — like sun through tinted glass/blinds, the most literal
+   "window tint" callback of the background options tried. Beam drifts
+   slowly; stripes stay still so the motion doesn't read as a spinner. */
 .hero::before, .page-hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0.06) 0px,
-    rgba(255, 255, 255, 0.06) 2px,
-    transparent 2px,
-    transparent 28px
-  );
+  background:
+    repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 2px,
+      transparent 2px,
+      transparent 28px
+    ),
+    linear-gradient(
+      115deg,
+      transparent 8%,
+      rgba(251, 146, 60, 0.16) 20%,
+      transparent 32%,
+      transparent 58%,
+      rgba(255, 255, 255, 0.1) 70%,
+      transparent 82%
+    );
+  background-size: 100% 100%, 220% 220%;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rays-drift {
+    0%, 100% { background-position: 0 0, 0% 0%; }
+    50% { background-position: 0 0, 100% 15%; }
+  }
+  .hero::before, .page-hero::before { animation: rays-drift 26s ease-in-out infinite; }
+}
+/* Fine film-grain texture on top of the rays — a small inline SVG noise
+   tile, no image request, blended in at low opacity for a tactile,
+   "premium material" feel rather than a flat gradient. */
+.hero::after, .page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.055;
+  mix-blend-mode: overlay;
   pointer-events: none;
 }
 /* Abstract vehicle silhouette, placeholder art until real photography is added (see README) */
