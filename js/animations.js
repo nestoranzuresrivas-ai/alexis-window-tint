@@ -1,6 +1,9 @@
-// Scroll reveals + a subtle hover spring, built with Motion (vendored in js/vendor/motion.js).
+// Scroll reveals, count-up stat numbers, and a noticeable hover spring,
+// built with Motion (vendored in js/vendor/motion.js).
 // Respects prefers-reduced-motion: if the visitor asked for reduced motion,
-// this file does nothing and every element stays at its normal, visible state.
+// this file does nothing and every element/number stays at its normal,
+// final, visible state. (The hero glow pulse and marquee scroll are pure
+// CSS and carry their own prefers-reduced-motion guards in styles.css.)
 import { animate, stagger } from "./vendor/motion.js";
 
 // NOTE: this uses a native IntersectionObserver instead of Motion's own
@@ -30,11 +33,29 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
+// Count up a [data-countup] element from 0 to its target once, using
+// animate()'s documented "single value" form (a bare from/to pair drives
+// onUpdate — this is the one animate() shape this vendored build is known
+// to run reliably, per the note above, so count-up reuses it rather than
+// reaching for an untested helper).
+function countUpOnce(el) {
+  const target = Number(el.dataset.countup);
+  if (!Number.isFinite(target)) return;
+  const suffix = el.dataset.countupSuffix || "";
+  animate(0, target, {
+    duration: 1.6,
+    ease: "easeOut",
+    onUpdate: (latest) => {
+      el.textContent = Math.round(latest) + suffix;
+    },
+  });
+}
+
 if (!prefersReducedMotion) {
   const ease = [0.16, 0.9, 0.3, 1];
 
-  // --- Single-element reveals: section headings, pricing tables, contact cards ---
-  const singleSelector = "main .section h2, .pricing-table-wrap, .contact-grid > .card";
+  // --- Single-element reveals: section headings, pricing tables, contact cards, tint-shade card ---
+  const singleSelector = "main .section h2, .pricing-table-wrap, .contact-grid > .card, .tint-shade-card";
   document.querySelectorAll(singleSelector).forEach((el) => {
     el.style.opacity = "0";
     el.style.transform = "translateY(40px)";
@@ -46,7 +67,7 @@ if (!prefersReducedMotion) {
   // --- Staggered vertical-rise reveals: trust bar, gallery grid ---
   const verticalGroups = [
     { group: ".trust-bar", items: ".trust-item" },
-    { group: ".gallery-grid", items: ".gallery-placeholder" },
+    { group: ".gallery-grid", items: ".gallery-photo, .gallery-placeholder" },
   ];
 
   verticalGroups.forEach(({ group, items }) => {
@@ -65,6 +86,13 @@ if (!prefersReducedMotion) {
           { opacity: [0, 1], y: [32, 0] },
           { delay: stagger(0.12), duration: 0.6, ease }
         );
+        // Stat numbers count up in step with their own card's reveal,
+        // rather than all firing at once.
+        children.forEach((child, i) => {
+          const counter = child.querySelector("[data-countup]");
+          if (!counter) return;
+          setTimeout(() => countUpOnce(counter), i * 120);
+        });
       });
     });
   });
