@@ -354,6 +354,64 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 }
 .gallery-photo figcaption::before { content: "●"; color: var(--color-accent-bright); font-size: 0.6em; margin-right: 0.45em; vertical-align: 0.1em; }
 
+/* ---- Before/After drag-compare slider ---- */
+.ba-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4) var(--space-3); }
+.ba-card {
+  --pos: 50%;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--color-primary-dark);
+  cursor: ew-resize;
+  touch-action: none;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: box-shadow 0.2s ease;
+}
+.ba-card:hover, .ba-card:focus-visible { box-shadow: var(--shadow-md), var(--shadow-glow); }
+.ba-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+/* The "before" image sits full-size underneath its own wrapper; clip-path
+   (not a narrowed width) reveals only the left --pos portion, so both
+   layers stay pixel-aligned with the "after" image beneath them. */
+.ba-before-wrap { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+
+.ba-divider { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; background: #fff; transform: translateX(-1.5px); box-shadow: 0 0 14px rgba(0, 0, 0, 0.45); pointer-events: none; }
+.ba-handle {
+  position: absolute; top: 50%; left: var(--pos); transform: translate(-50%, -50%);
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.45), 0 0 0 4px rgba(255, 255, 255, 0.92);
+  display: flex; align-items: center; justify-content: center; color: #fff;
+  pointer-events: none;
+}
+.ba-handle svg { width: 20px; height: 20px; }
+
+.ba-label { position: absolute; top: 12px; font-family: var(--font-heading); font-weight: 600; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase; color: #fff; background: rgba(20, 42, 69, 0.72); padding: 0.32rem 0.6rem; border-radius: 4px; pointer-events: none; }
+.ba-label-before { left: 12px; }
+.ba-label-after { right: 12px; }
+
+.ba-hint {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 0.4rem;
+  background: rgba(20, 42, 69, 0.85); color: #fff;
+  font-family: var(--font-heading); font-weight: 600; font-size: 0.78rem;
+  padding: 0.45rem 0.9rem; border-radius: 999px;
+  opacity: 1; transition: opacity 0.4s ease; pointer-events: none; white-space: nowrap;
+}
+.ba-hint svg { width: 15px; height: 15px; }
+.ba-card.ba-touched .ba-hint { opacity: 0; }
+
+.ba-caption { margin-top: 0.85rem; text-align: center; }
+.ba-caption strong { display: block; font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 0.98rem; }
+.ba-caption span { color: var(--color-text-muted); font-size: 0.8rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ba-card, .ba-hint { transition: none; }
+}
+
 /* ---- Footer ---- */
 .site-footer { background: var(--color-primary); color: var(--color-on-dark); margin-top: var(--space-7); }
 .footer-inner { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); padding-block: var(--space-6); }

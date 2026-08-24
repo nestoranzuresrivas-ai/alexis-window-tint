@@ -78,6 +78,7 @@ if (!prefersReducedMotion) {
   const verticalGroups = [
     { group: ".trust-bar", items: ".trust-item" },
     { group: ".gallery-grid", items: ".gallery-photo, .gallery-placeholder" },
+    { group: ".ba-grid", items: ".ba-card" },
   ];
 
   verticalGroups.forEach(({ group, items }) => {
