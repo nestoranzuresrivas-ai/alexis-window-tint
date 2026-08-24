@@ -6,12 +6,20 @@ commercial tinting).
 
 ## Viewing the site
 
-No build step needed. Either:
+No build step needed, but how you open it matters:
 
-- Open `index.html` directly in a browser, or
-- Serve it locally so relative links and the mobile nav behave
-  exactly as they will in production: `npx serve .` (or any static
-  file server) from this folder, then visit the printed URL.
+- **Serve it locally** (recommended): `npx serve .` (or any static
+  file server) from this folder, then visit the printed URL. Relative
+  links, the mobile nav, and — importantly — `js/animations.js` only
+  behave exactly as they will in production when served over `http://`.
+- Opening `index.html` directly in a browser (`file://`) mostly works,
+  but Chromium-family browsers block `<script type="module">` from
+  loading over `file://`, so `js/animations.js` silently never runs:
+  scroll reveals/count-up just show their final static values (fine,
+  by design), but the reduced-motion guard on the homepage hero video
+  also won't run, so that one visitor group would see it autoplay
+  regardless of their OS setting. Serve over `http://` to test that
+  path for real.
 
 ## Structure
 
@@ -24,9 +32,10 @@ about.html          Experience + reviews
 contact.html        Address, phone, email, hours, map
 css/styles.css      All styles + design tokens (colors, fonts, spacing)
 js/script.js        Mobile nav toggle
-js/animations.js    Scroll reveals + button hover spring (built on Motion)
+js/animations.js    Scroll reveals, count-up, hero-video reduced-motion guard (built on Motion)
 js/vendor/motion.js Vendored copy of the Motion animation library (motion.dev)
 images/             Photo assets go here
+videos/             Homepage hero background video
 ```
 
 ### Animations
@@ -119,3 +128,38 @@ properties in the `:root` token block, running dark navy (5%, darkest)
 to near-white (70%, lightest) so it stays on-brand instead of plain
 gray. To change a shade, edit its token; to add the same section to
 `pricing.html`, copy the `.tint-shade-card` block from `services.html`.
+
+## The homepage hero video
+
+`index.html`'s hero plays `videos/hero-tint.mp4` (client-provided tint
+application B-roll, ~1.2MB, 11s, 1280×720 — already reasonably
+compressed; this environment has no `ffmpeg`/video encoder available,
+so it ships as provided. If you have access to one and want it
+smaller, re-encode in place at the same path — no markup changes
+needed) full-bleed behind the headline:
+
+```html
+<section class="hero hero-video">
+  <video class="hero-video-bg" autoplay muted loop playsinline poster="images/hero-poster.jpg" aria-hidden="true">
+    <source src="videos/hero-tint.mp4" type="video/mp4">
+  </video>
+  <div class="hero-video-overlay" aria-hidden="true"></div>
+  <div class="container hero-content">…</div>
+</section>
+```
+
+`images/hero-poster.jpg` was pulled from the video itself (frame at
+~3s) rather than a separate photo, so it matches exactly. `.hero-video`
+(in `css/styles.css`) swaps out the gradient/stripe/glow/grain
+background used on the other five pages' `.page-hero` banners (which
+are untouched) for the video plus a semi-transparent navy gradient
+overlay for text contrast; the text/CTA layout and their existing
+fade-up-in animation are unchanged. `js/animations.js` pauses the
+video and drops its `autoplay` attribute for `prefers-reduced-motion`
+visitors (a declarative HTML attribute like `autoplay` can't be
+stopped by CSS alone) — see the "Viewing the site" section above for
+why that guard needs `http://`, not `file://`, to actually run.
+
+To swap in a different clip: replace `videos/hero-tint.mp4` (same
+filename, or update the `<source>` path) and regenerate the poster
+from a representative frame.

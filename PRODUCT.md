@@ -40,13 +40,20 @@ HTML files (no templating engine).
 - Static HTML/CSS/JS, no build step, no framework, no backend.
 - Motion (motion.dev) is vendored locally at `js/vendor/motion.js`
   rather than CDN-loaded — no runtime network dependency.
-- Must stay fast-loading: no video or 3D assets (explicit constraint
-  from the current redesign request).
+- Must stay fast-loading: no 3D assets. One background video is now an
+  explicit exception (see below) — superseding an earlier "no video"
+  constraint from a prior redesign request; keep any future video
+  small (this one is ~1.2MB/11s/720p) and always paired with a poster.
 - `prefers-reduced-motion` must be honored — established pattern
-  already in `js/animations.js`, must extend, not bypass.
+  already in `js/animations.js`, must extend, not bypass. Includes the
+  hero background video: reduced-motion visitors get `video.pause()` +
+  `autoplay` removed via JS (declarative `autoplay` can't be stopped
+  by CSS/media query alone), landing on the poster frame.
 - Real client-provided assets now in use: logo badge
-  (`images/logo-mark.png`) and 3 real job photos (pool enclosure, GMC
-  truck, orange tractor) in the gallery.
+  (`images/logo-mark.png`), 3 real job photos (pool enclosure, GMC
+  truck, orange tractor) in the gallery, and a homepage hero background
+  video (`videos/hero-tint.mp4`, tint application B-roll) with poster
+  (`images/hero-poster.jpg`).
 - Facebook review link is still a placeholder
   (`data-placeholder="facebook-url"` in about.html) — real URL not yet
   provided.

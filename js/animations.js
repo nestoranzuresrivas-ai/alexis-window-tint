@@ -33,6 +33,16 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
+// The autoplay/loop/muted attributes on the hero background video are
+// declarative HTML — CSS and the reduced-motion guard below can't stop
+// them from starting. Outside the main guard (runs regardless) so a
+// reduced-motion visitor gets the static poster frame, not a moving video.
+const heroVideo = document.querySelector(".hero-video-bg");
+if (heroVideo && prefersReducedMotion) {
+  heroVideo.removeAttribute("autoplay");
+  heroVideo.pause();
+}
+
 // Count up a [data-countup] element from 0 to its target once, using
 // animate()'s documented "single value" form (a bare from/to pair drives
 // onUpdate — this is the one animate() shape this vendored build is known
