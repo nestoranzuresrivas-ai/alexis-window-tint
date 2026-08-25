@@ -521,11 +521,14 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .hero-video-overlay {
   position: absolute;
   inset: 0;
+  /* ~50% less opaque than the original (0.88/0.72/0.6) so more of the
+     actual shop footage shows through; text stays readable via the
+     hero h1's own text-shadow below. */
   background: linear-gradient(
     135deg,
-    rgba(20, 42, 69, 0.88) 0%,
-    rgba(20, 42, 69, 0.72) 45%,
-    rgba(30, 58, 95, 0.6) 100%
+    rgba(20, 42, 69, 0.45) 0%,
+    rgba(20, 42, 69, 0.37) 45%,
+    rgba(30, 58, 95, 0.3) 100%
   );
 }
 .hero-content { position: relative; z-index: 1; }
