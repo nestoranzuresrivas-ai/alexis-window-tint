@@ -145,13 +145,15 @@ the five compact page banners (`.page-hero.hero-video`) alike:
 </section>
 ```
 
-The current clip is real shop footage from the client's cousin
-(~20MB, 1080p) — noticeably larger than the ~1.2MB clip it replaced.
-This environment has no `ffmpeg`/video encoder available, so it ships
-unre-encoded; before this goes live, re-encode it down (H.264,
-1280×720, trimmed to the shortest loop that still reads well — the
-original clip got to ~1.2MB this way) at the same path, no markup
-changes needed.
+The current clip is real shop footage from the client's cousin: 15s,
+1280×720, H.264, no audio, ~2.4MB (re-encoded with `ffmpeg -vf
+scale=1280:-2 -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p
+-movflags +faststart -an` from the original ~20MB 1920×1080 source —
+CRF 28 was indistinguishable from CRF 24 once played behind the
+overlay, at roughly half the size). `images/hero-poster.jpg` is a
+frame grabbed straight from that same encoded file (`ffmpeg -ss 5
+-i videos/hero-tint.mp4 -frames:v 1 -q:v 3 images/hero-poster.jpg`),
+so it matches exactly what plays.
 
 `.hero-video` (in `css/styles.css`) swaps out the old gradient/stripe
 /glow/grain treatment — plus the placeholder car-silhouette backdrop
@@ -164,12 +166,8 @@ visitors on whichever page it's on (a declarative HTML attribute like
 section above for why that guard needs `http://`, not `file://`, to
 actually run.
 
-`images/hero-poster.jpg` is still the frame pulled from the *previous*
-clip — this environment has no way to grab a frame from the new one.
-Swap it for a representative still from the new footage before going
-live, so the poster (shown while the video loads, and to
-reduced-motion visitors) actually matches what plays.
-
-To swap in a different clip: replace `videos/hero-tint.mp4` (same
-filename, or update every `<source>` path) and regenerate the poster
-from a representative frame.
+To swap in a different clip: re-encode it with the `ffmpeg` command
+above (adjust `-crf` if it looks too soft/heavy — lower is higher
+quality, larger file), replace `videos/hero-tint.mp4` (same filename,
+or update every `<source>` path), and regenerate the poster from a
+representative frame the same way.
