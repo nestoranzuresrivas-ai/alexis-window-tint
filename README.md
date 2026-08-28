@@ -16,7 +16,7 @@ No build step needed, but how you open it matters:
   but Chromium-family browsers block `<script type="module">` from
   loading over `file://`, so `js/animations.js` silently never runs:
   scroll reveals/count-up just show their final static values (fine,
-  by design), but the reduced-motion guard on the homepage hero video
+  by design), but the reduced-motion guard on the hero background video
   also won't run, so that one visitor group would see it autoplay
   regardless of their OS setting. Serve over `http://` to test that
   path for real.
@@ -35,7 +35,7 @@ js/script.js        Mobile nav toggle
 js/animations.js    Scroll reveals, count-up, hero-video reduced-motion guard (built on Motion)
 js/vendor/motion.js Vendored copy of the Motion animation library (motion.dev)
 images/             Photo assets go here
-videos/             Homepage hero background video
+videos/             Hero background video (all six pages)
 ```
 
 ### Animations
@@ -129,17 +129,14 @@ to near-white (70%, lightest) so it stays on-brand instead of plain
 gray. To change a shade, edit its token; to add the same section to
 `pricing.html`, copy the `.tint-shade-card` block from `services.html`.
 
-## The homepage hero video
+## The hero background video
 
-`index.html`'s hero plays `videos/hero-tint.mp4` (client-provided tint
-application B-roll, ~1.2MB, 11s, 1280×720 — already reasonably
-compressed; this environment has no `ffmpeg`/video encoder available,
-so it ships as provided. If you have access to one and want it
-smaller, re-encode in place at the same path — no markup changes
-needed) full-bleed behind the headline:
+All six pages play the same clip, `videos/hero-tint.mp4`, full-bleed
+behind their hero heading — the big home hero (`.hero.hero-video`) and
+the five compact page banners (`.page-hero.hero-video`) alike:
 
 ```html
-<section class="hero hero-video">
+<section class="hero hero-video">      <!-- or class="page-hero hero-video" on the other five pages -->
   <video class="hero-video-bg" autoplay muted loop playsinline poster="images/hero-poster.jpg" aria-hidden="true">
     <source src="videos/hero-tint.mp4" type="video/mp4">
   </video>
@@ -148,18 +145,31 @@ needed) full-bleed behind the headline:
 </section>
 ```
 
-`images/hero-poster.jpg` was pulled from the video itself (frame at
-~3s) rather than a separate photo, so it matches exactly. `.hero-video`
-(in `css/styles.css`) swaps out the gradient/stripe/glow/grain
-background used on the other five pages' `.page-hero` banners (which
-are untouched) for the video plus a semi-transparent navy gradient
-overlay for text contrast; the text/CTA layout and their existing
+The current clip is real shop footage from the client's cousin
+(~20MB, 1080p) — noticeably larger than the ~1.2MB clip it replaced.
+This environment has no `ffmpeg`/video encoder available, so it ships
+unre-encoded; before this goes live, re-encode it down (H.264,
+1280×720, trimmed to the shortest loop that still reads well — the
+original clip got to ~1.2MB this way) at the same path, no markup
+changes needed.
+
+`.hero-video` (in `css/styles.css`) swaps out the old gradient/stripe
+/glow/grain treatment — plus the placeholder car-silhouette backdrop
+on the five page banners — for the video plus a semi-transparent navy
+gradient overlay for text contrast; the text/CTA layout and existing
 fade-up-in animation are unchanged. `js/animations.js` pauses the
 video and drops its `autoplay` attribute for `prefers-reduced-motion`
-visitors (a declarative HTML attribute like `autoplay` can't be
-stopped by CSS alone) — see the "Viewing the site" section above for
-why that guard needs `http://`, not `file://`, to actually run.
+visitors on whichever page it's on (a declarative HTML attribute like
+`autoplay` can't be stopped by CSS alone) — see the "Viewing the site"
+section above for why that guard needs `http://`, not `file://`, to
+actually run.
+
+`images/hero-poster.jpg` is still the frame pulled from the *previous*
+clip — this environment has no way to grab a frame from the new one.
+Swap it for a representative still from the new footage before going
+live, so the poster (shown while the video loads, and to
+reduced-motion visitors) actually matches what plays.
 
 To swap in a different clip: replace `videos/hero-tint.mp4` (same
-filename, or update the `<source>` path) and regenerate the poster
+filename, or update every `<source>` path) and regenerate the poster
 from a representative frame.
