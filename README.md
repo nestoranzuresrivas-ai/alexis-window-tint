@@ -146,14 +146,31 @@ the five compact page banners (`.page-hero.hero-video`) alike:
 ```
 
 The current clip is real shop footage from the client's cousin: 15s,
-1280×720, H.264, no audio, ~2.4MB (re-encoded with `ffmpeg -vf
-scale=1280:-2 -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p
--movflags +faststart -an` from the original ~20MB 1920×1080 source —
-CRF 28 was indistinguishable from CRF 24 once played behind the
-overlay, at roughly half the size). `images/hero-poster.jpg` is a
-frame grabbed straight from that same encoded file (`ffmpeg -ss 5
--i videos/hero-tint.mp4 -frames:v 1 -q:v 3 images/hero-poster.jpg`),
-so it matches exactly what plays.
+1280×720, H.264, no audio, ~3MB. The raw footage (first re-encoded at
+CRF 28, ~2.4MB) read dark and flat — phone footage shot under dim
+garage lighting, averaging ~30% luma with a slight green cast and
+visible compression noise in the shadows once compressed. It's graded
+before encoding, not just recompressed:
+
+```
+ffmpeg -i videos/hero-tint.mp4 -vf \
+  "hqdn3d=2:1.5:6:6,eq=gamma=1.15:contrast=1.12:saturation=1.18:brightness=0.02,colorbalance=rs=0.05:gs=-0.08:rm=0.03:gm=-0.05,unsharp=5:5:0.6:5:5:0.0,scale=1280:-2" \
+  -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p -movflags +faststart -an \
+  videos/hero-tint.mp4
+```
+
+In order: `hqdn3d` denoises before grading so brightening doesn't
+amplify compression noise into visible blocking; `eq` lifts shadows via
+gamma (opens up the dark areas without blowing out highlights) and
+adds contrast/saturation back to what was a flat-looking clip;
+`colorbalance` pulls the green cast toward neutral; `unsharp` restores
+some perceived detail lost to denoising. CRF 26 (rather than the
+original 28) spends the extra ~600KB where the grade needs it — dark,
+denoised footage compresses more efficiently than noisy footage, so
+even at a lower CRF the result lands close to the original file size.
+`images/hero-poster.jpg` is a frame grabbed straight from that same
+graded, encoded file (`ffmpeg -ss 5 -i videos/hero-tint.mp4 -frames:v 1
+-q:v 3 images/hero-poster.jpg`), so it matches exactly what plays.
 
 `.hero-video` (in `css/styles.css`) swaps out the old gradient/stripe
 /glow/grain treatment — plus the placeholder car-silhouette backdrop
@@ -167,7 +184,8 @@ section above for why that guard needs `http://`, not `file://`, to
 actually run.
 
 To swap in a different clip: re-encode it with the `ffmpeg` command
-above (adjust `-crf` if it looks too soft/heavy — lower is higher
-quality, larger file), replace `videos/hero-tint.mp4` (same filename,
-or update every `<source>` path), and regenerate the poster from a
-representative frame the same way.
+above (drop or retune the grading filters if the new footage isn't
+dark/flat to begin with; adjust `-crf` if it looks too soft/heavy —
+lower is higher quality, larger file), replace `videos/hero-tint.mp4`
+(same filename, or update every `<source>` path), and regenerate the
+poster from a representative frame the same way.
