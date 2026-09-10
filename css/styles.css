@@ -598,12 +598,16 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   inset: 0;
   /* ~50% less opaque than the original (0.88/0.72/0.6) so more of the
      actual shop footage shows through; text stays readable via the
-     hero h1's own text-shadow below. */
+     hero h1's own text-shadow below. Floor raised slightly (audit
+     finding C2) -- the lightest stop was 0.3, which on a bright video
+     frame could drop the on-video text below a verifiable contrast
+     ratio; 0.38 keeps a comfortable margin without re-darkening the
+     footage back toward the pre-grading look. */
   background: linear-gradient(
     135deg,
-    rgba(20, 42, 69, 0.45) 0%,
-    rgba(20, 42, 69, 0.37) 45%,
-    rgba(30, 58, 95, 0.3) 100%
+    rgba(20, 42, 69, 0.5) 0%,
+    rgba(20, 42, 69, 0.42) 45%,
+    rgba(30, 58, 95, 0.38) 100%
   );
 }
 .hero-content { position: relative; z-index: 1; }
