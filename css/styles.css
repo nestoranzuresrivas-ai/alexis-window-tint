@@ -216,7 +216,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   padding-inline-end: 2.5rem;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
@@ -246,8 +246,8 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .trust-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-md), var(--shadow-glow); }
-.trust-item strong { display: block; color: var(--color-primary); font-family: var(--font-heading); font-size: 1.4rem; }
-.trust-item .stars { color: var(--color-star); font-size: 1.4rem; }
+.trust-item strong { display: block; color: var(--color-primary); font-family: var(--font-heading); font-size: 1.5rem; }
+.trust-item .stars { color: var(--color-star); font-size: 1.5rem; }
 
 /* ---- Icon badge (accent circle behind a small svg icon) ---- */
 .icon-badge {
@@ -359,7 +359,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 
 /* ---- Gallery ---- */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-3); }
-.gallery-placeholder { aspect-ratio: 4 / 3; background: var(--color-bg-alt); border: 1px dashed var(--color-border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.9rem; text-align: center; padding: var(--space-2); }
+.gallery-placeholder { aspect-ratio: 4 / 3; background: var(--color-bg-alt); border: 1px dashed var(--color-border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.875rem; text-align: center; padding: var(--space-2); }
 .gallery-placeholder .icon-badge { margin-bottom: var(--space-1); }
 
 /* Real work photos — same 4:3 footprint as the placeholder tiles so the two
@@ -376,7 +376,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   color: #fff;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 .gallery-photo figcaption::before { content: "●"; color: var(--color-accent-bright); font-size: 0.6em; margin-right: 0.45em; vertical-align: 0.1em; }
 
@@ -415,7 +415,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 }
 .ba-handle svg { width: 20px; height: 20px; }
 
-.ba-label { position: absolute; top: 12px; font-family: var(--font-heading); font-weight: 600; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase; color: #fff; background: rgba(20, 42, 69, 0.72); padding: 0.32rem 0.6rem; border-radius: 4px; pointer-events: none; }
+.ba-label { position: absolute; top: var(--space-1); font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; color: #fff; background: rgba(20, 42, 69, 0.72); padding: 4px 8px; border-radius: 4px; pointer-events: none; }
 .ba-label-before { left: 12px; }
 .ba-label-after { right: 12px; }
 
@@ -423,7 +423,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
   display: flex; align-items: center; gap: 0.4rem;
   background: rgba(20, 42, 69, 0.85); color: #fff;
-  font-family: var(--font-heading); font-weight: 600; font-size: 0.78rem;
+  font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem;
   padding: 0.45rem 0.9rem; border-radius: 999px;
   opacity: 1; transition: opacity 0.4s ease; pointer-events: none; white-space: nowrap;
 }
@@ -431,8 +431,8 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .ba-card.ba-touched .ba-hint { opacity: 0; }
 
 .ba-caption { margin-top: 0.85rem; text-align: center; }
-.ba-caption strong { display: block; font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 0.98rem; }
-.ba-caption span { color: var(--color-text-muted); font-size: 0.8rem; }
+.ba-caption strong { display: block; font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 1rem; }
+.ba-caption span { color: var(--color-text-muted); font-size: 0.75rem; }
 
 @media (prefers-reduced-motion: reduce) {
   .ba-card, .ba-hint { transition: none; }
@@ -441,7 +441,11 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 /* ---- Footer ---- */
 .site-footer { background: var(--color-primary); color: var(--color-on-dark); margin-top: var(--space-7); }
 .footer-inner { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); padding-block: var(--space-6); }
-.footer-col h3 { color: #fff; font-size: 1rem; margin-bottom: var(--space-2); }
+/* No font-size override here (audit finding T3) — this used to render
+   footer headings at 16px vs. the 20px every other h3 on the site uses,
+   with no reason for the mismatch. Inheriting the base h3 size keeps
+   "Contact"/"Hours"/"Quick Links" consistent with card titles elsewhere. */
+.footer-col h3 { color: #fff; margin-bottom: var(--space-2); }
 .footer-col a { transition: color 0.2s ease; }
 .footer-col a:hover { color: var(--color-star); }
 .footer-logo { color: #fff; }
@@ -464,7 +468,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   transform: translateY(-2px);
 }
 .footer-social svg { width: 15px; height: 15px; fill: currentColor; }
-.footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-block: var(--space-2); font-size: 0.85rem; text-align: center; color: var(--color-on-dark-muted); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-block: var(--space-2); font-size: 0.875rem; text-align: center; color: var(--color-on-dark-muted); }
 
 /* ---- Hero ---- */
 .hero {
@@ -579,7 +583,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .hero-content { position: relative; z-index: 1; }
 .hero h1 { color: #fff; font-size: clamp(2.75rem, 6vw, 4.5rem); letter-spacing: -0.01em; text-shadow: 0 4px 40px rgba(0, 0, 0, 0.3); }
 .hero h1 .text-accent-bright { color: var(--color-accent-bright); }
-.hero p.lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.1rem; }
+.hero p.lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.125rem; }
 .hero .btn { margin-top: var(--space-4); margin-inline: var(--space-1); }
 .hero .btn-outline { border-color: #fff; color: #fff; }
 .hero .btn-outline:hover { background: #fff; color: var(--color-primary); }
@@ -609,7 +613,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 }
 .page-hero .hero-content { position: relative; z-index: 1; }
 .page-hero h1 { color: #fff; font-size: clamp(2.25rem, 4.5vw, 3.25rem); letter-spacing: -0.01em; }
-.page-hero .lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.1rem; }
+.page-hero .lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.125rem; }
 .page-hero .hero-car { opacity: 0.1; width: min(45vw, 420px); }
 /* Same glow as the home hero, scaled down to match the compact banner. */
 .page-hero .hero-glow { width: 420px; height: 420px; opacity: 0.55; }
