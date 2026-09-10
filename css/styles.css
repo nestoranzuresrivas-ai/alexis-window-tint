@@ -200,7 +200,11 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 
 /* ---- Marquee ticker (decorative — content is aria-hidden and repeats info
    already exposed accessibly in the nav, trust bar, and footer) ---- */
-.marquee { background: var(--color-accent); overflow: hidden; white-space: nowrap; }
+/* Navy, not accent-orange: a saturated, animated band directly above the
+   hero headline was winning the eye before the H1 did (audit finding H1).
+   Keeping the motion (it's still useful as ambient texture) but dropping
+   the color removes it from competition with the hero and the CTA. */
+.marquee { background: var(--color-primary-dark); overflow: hidden; white-space: nowrap; }
 .marquee-track { display: inline-flex; width: max-content; animation: marquee-scroll 30s linear infinite; }
 .marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
 .marquee-content {
