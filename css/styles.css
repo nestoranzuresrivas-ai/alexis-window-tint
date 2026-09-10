@@ -143,7 +143,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   height: 34px;
   width: auto;
   vertical-align: middle;
-  margin-right: 0.5rem;
+  margin-right: var(--space-1);
   border-radius: 6px;
   box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08), var(--shadow-sm);
 }
@@ -168,7 +168,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 
 .header-cta { white-space: nowrap; }
 
-.header-social { display: flex; align-items: center; gap: 2px; }
+.header-social { display: flex; align-items: center; gap: 4px; }
 .header-social a {
   display: inline-flex;
   align-items: center;
@@ -212,7 +212,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
 .marquee-content {
   display: inline-block;
-  padding-block: 0.55rem;
+  padding-block: var(--space-1);
   padding-inline-end: 2.5rem;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -315,8 +315,8 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 /* In-card links ("Learn More →") — previously inherited plain body-text
    color with no hover state at all. Accent color plus a gap-widening arrow
    nudge makes them read as links and feel alive, not static. */
-.card > a { display: inline-flex; align-items: center; gap: 0.25rem; margin-top: var(--space-2); color: var(--color-accent); font-weight: 600; transition: color 0.2s ease, gap 0.2s ease; }
-.card > a:hover { color: var(--color-accent-dark); gap: 0.55rem; }
+.card > a { display: inline-flex; align-items: center; gap: 4px; margin-top: var(--space-2); color: var(--color-accent); font-weight: 600; transition: color 0.2s ease, gap 0.2s ease; }
+.card > a:hover { color: var(--color-accent-dark); gap: 8px; }
 
 /* ---- Pricing table ---- */
 .pricing-table { width: 100%; border-collapse: collapse; background: var(--color-bg); box-shadow: var(--shadow-sm); border-radius: var(--radius); overflow: hidden; }
@@ -416,21 +416,21 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .ba-handle svg { width: 20px; height: 20px; }
 
 .ba-label { position: absolute; top: var(--space-1); font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; color: #fff; background: rgba(20, 42, 69, 0.72); padding: 4px 8px; border-radius: 4px; pointer-events: none; }
-.ba-label-before { left: 12px; }
-.ba-label-after { right: 12px; }
+.ba-label-before { left: var(--space-1); }
+.ba-label-after { right: var(--space-1); }
 
 .ba-hint {
-  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-  display: flex; align-items: center; gap: 0.4rem;
+  position: absolute; bottom: var(--space-2); left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 8px;
   background: rgba(20, 42, 69, 0.85); color: #fff;
   font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem;
-  padding: 0.45rem 0.9rem; border-radius: 999px;
-  opacity: 1; transition: opacity 0.4s ease; pointer-events: none; white-space: nowrap;
+  padding: 8px 16px; border-radius: 999px;
+  opacity: 1; transition: opacity 0.25s ease; pointer-events: none; white-space: nowrap;
 }
 .ba-hint svg { width: 15px; height: 15px; }
 .ba-card.ba-touched .ba-hint { opacity: 0; }
 
-.ba-caption { margin-top: 0.85rem; text-align: center; }
+.ba-caption { margin-top: var(--space-2); text-align: center; }
 .ba-caption strong { display: block; font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 1rem; }
 .ba-caption span { color: var(--color-text-muted); font-size: 0.75rem; }
 
