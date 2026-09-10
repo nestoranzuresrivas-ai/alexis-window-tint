@@ -375,7 +375,12 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .tint-shade-cta { margin-top: var(--space-4); }
 
 /* ---- Gallery ---- */
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-3); }
+/* auto-fill (not auto-fit) so a handful of tiles stay tile-sized instead
+   of stretching to fill the row (audit finding D1) — the gallery
+   currently has only 3 tiles (one a "coming soon" placeholder), and
+   auto-fit was blowing them up into oversized, gap-heavy columns on
+   wide viewports. auto-fill leaves the unused track space empty instead. */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-3); justify-content: center; }
 .gallery-placeholder { aspect-ratio: 4 / 3; background: var(--color-bg-alt); border: 1px dashed var(--color-border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.875rem; text-align: center; padding: var(--space-2); }
 .gallery-placeholder .icon-badge { margin-bottom: var(--space-1); }
 
