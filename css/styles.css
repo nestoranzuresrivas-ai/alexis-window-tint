@@ -582,7 +582,11 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 }
 .hero-content { position: relative; z-index: 1; }
 .hero h1 { color: #fff; font-size: clamp(2.75rem, 6vw, 4.5rem); letter-spacing: -0.01em; text-shadow: 0 4px 40px rgba(0, 0, 0, 0.3); }
-.hero h1 .text-accent-bright { color: var(--color-accent-bright); }
+/* Emphasis via weight, not color (audit finding H2) — with the marquee
+   background and the "Call Now" button both also orange, a third orange
+   element in the same viewport (this in-headline word) diluted which one
+   read as the actual primary action. Weight alone still sets it apart. */
+.hero h1 .text-accent-bright { font-weight: 800; }
 .hero p.lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.125rem; }
 .hero .btn { margin-top: var(--space-4); margin-inline: var(--space-1); }
 .hero .btn-outline { border-color: #fff; color: #fff; }
