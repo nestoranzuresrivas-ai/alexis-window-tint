@@ -16,7 +16,10 @@
   --color-accent-dark: #9a3412;
   --color-accent-bright: #fb923c;
   --color-border: #e2e8f0;
-  --color-star: #f59e0b;
+  /* #f59e0b measured 2.15:1 on white — fails even the relaxed 3:1 bold-text
+     threshold (audit finding C1). Darkened to a value that clears 4.5:1
+     (the stricter body-text minimum) with room to spare. */
+  --color-star: #b45309;
 
   --font-heading: 'Poppins', 'Segoe UI', Arial, sans-serif;
   --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
