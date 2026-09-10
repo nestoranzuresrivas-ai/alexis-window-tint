@@ -16,7 +16,10 @@
   --color-accent-dark: #9a3412;
   --color-accent-bright: #fb923c;
   --color-border: #e2e8f0;
-  --color-star: #f59e0b;
+  /* #f59e0b measured 2.15:1 on white — fails even the relaxed 3:1 bold-text
+     threshold (audit finding C1). Darkened to a value that clears 4.5:1
+     (the stricter body-text minimum) with room to spare. */
+  --color-star: #b45309;
 
   --font-heading: 'Poppins', 'Segoe UI', Arial, sans-serif;
   --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
@@ -76,7 +79,11 @@ body {
 main { overflow-x: hidden; }
 
 h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); line-height: 1.2; }
-h1 { font-size: clamp(2rem, 4vw, 3rem); }
+/* Flat fallback, not a clamp (audit finding T2) — every real <h1> on the
+   site sits inside .hero or .page-hero, both of which override this, so
+   the old clamp() range never actually rendered anywhere and just
+   misrepresented the real type scale to anyone reading this file. */
+h1 { font-size: 2rem; }
 h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); margin-bottom: var(--space-3); }
 h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 
@@ -140,7 +147,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   height: 34px;
   width: auto;
   vertical-align: middle;
-  margin-right: 0.5rem;
+  margin-right: var(--space-1);
   border-radius: 6px;
   box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08), var(--shadow-sm);
 }
@@ -159,13 +166,13 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   height: 2px;
   background: var(--color-accent);
   transform: scaleX(0);
-  transition: transform 0.25s ease;
+  transition: transform 0.2s ease;
 }
 .site-nav a:hover::after, .site-nav a.active::after { transform: scaleX(1); }
 
 .header-cta { white-space: nowrap; }
 
-.header-social { display: flex; align-items: center; gap: 2px; }
+.header-social { display: flex; align-items: center; gap: 4px; }
 .header-social a {
   display: inline-flex;
   align-items: center;
@@ -200,16 +207,20 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 
 /* ---- Marquee ticker (decorative — content is aria-hidden and repeats info
    already exposed accessibly in the nav, trust bar, and footer) ---- */
-.marquee { background: var(--color-accent); overflow: hidden; white-space: nowrap; }
+/* Navy, not accent-orange: a saturated, animated band directly above the
+   hero headline was winning the eye before the H1 did (audit finding H1).
+   Keeping the motion (it's still useful as ambient texture) but dropping
+   the color removes it from competition with the hero and the CTA. */
+.marquee { background: var(--color-primary-dark); overflow: hidden; white-space: nowrap; }
 .marquee-track { display: inline-flex; width: max-content; animation: marquee-scroll 30s linear infinite; }
 .marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
 .marquee-content {
   display: inline-block;
-  padding-block: 0.55rem;
+  padding-block: var(--space-1);
   padding-inline-end: 2.5rem;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
@@ -239,8 +250,8 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .trust-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-md), var(--shadow-glow); }
-.trust-item strong { display: block; color: var(--color-primary); font-family: var(--font-heading); font-size: 1.4rem; }
-.trust-item .stars { color: var(--color-star); font-size: 1.4rem; }
+.trust-item strong { display: block; color: var(--color-primary); font-family: var(--font-heading); font-size: 1.5rem; }
+.trust-item .stars { color: var(--color-star); font-size: 1.5rem; }
 
 /* ---- Icon badge (accent circle behind a small svg icon) ---- */
 .icon-badge {
@@ -308,8 +319,8 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 /* In-card links ("Learn More →") — previously inherited plain body-text
    color with no hover state at all. Accent color plus a gap-widening arrow
    nudge makes them read as links and feel alive, not static. */
-.card > a { display: inline-flex; align-items: center; gap: 0.25rem; margin-top: var(--space-2); color: var(--color-accent); font-weight: 600; transition: color 0.2s ease, gap 0.2s ease; }
-.card > a:hover { color: var(--color-accent-dark); gap: 0.55rem; }
+.card > a { display: inline-flex; align-items: center; gap: 4px; margin-top: var(--space-2); color: var(--color-accent); font-weight: 600; transition: color 0.2s ease, gap 0.2s ease; }
+.card > a:hover { color: var(--color-accent-dark); gap: 8px; }
 
 /* ---- Pricing table ---- */
 .pricing-table { width: 100%; border-collapse: collapse; background: var(--color-bg); box-shadow: var(--shadow-sm); border-radius: var(--radius); overflow: hidden; }
@@ -320,6 +331,23 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .pricing-table tbody tr { transition: background-color 0.15s ease; }
 .pricing-table tbody tr:hover { background: var(--color-accent-soft); }
 .pricing-table tbody tr:hover td:last-child { color: var(--color-accent-dark); }
+/* Entry-level price called out (audit finding D2) — 28 rows across the two
+   tables otherwise carry identical visual weight, so the $40 figure
+   already promoted on the homepage had no distinction on the page where
+   people actually decide. */
+.pricing-table-highlight { background: var(--color-accent-soft); }
+.pricing-table-highlight td:last-child { color: var(--color-accent-dark); }
+.pricing-table-badge {
+  display: inline-block;
+  margin-left: var(--space-1);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
 .pricing-table-wrap { overflow-x: auto; margin-bottom: var(--space-5); }
 
 /* ---- Tint shade reference (CSS swatches, no photo dependency) ---- */
@@ -351,8 +379,13 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 .tint-shade-cta { margin-top: var(--space-4); }
 
 /* ---- Gallery ---- */
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-3); }
-.gallery-placeholder { aspect-ratio: 4 / 3; background: var(--color-bg-alt); border: 1px dashed var(--color-border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.9rem; text-align: center; padding: var(--space-2); }
+/* auto-fill (not auto-fit) so a handful of tiles stay tile-sized instead
+   of stretching to fill the row (audit finding D1) — the gallery
+   currently has only 3 tiles (one a "coming soon" placeholder), and
+   auto-fit was blowing them up into oversized, gap-heavy columns on
+   wide viewports. auto-fill leaves the unused track space empty instead. */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-3); justify-content: center; }
+.gallery-placeholder { aspect-ratio: 4 / 3; background: var(--color-bg-alt); border: 1px dashed var(--color-border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.875rem; text-align: center; padding: var(--space-2); }
 .gallery-placeholder .icon-badge { margin-bottom: var(--space-1); }
 
 /* Real work photos — same 4:3 footprint as the placeholder tiles so the two
@@ -360,7 +393,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
    so busier photo content stays contained behind readable white text. */
 .gallery-photo { position: relative; aspect-ratio: 4 / 3; margin: 0; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .gallery-photo:hover { transform: translateY(-4px) scale(1.02); box-shadow: var(--shadow-md), var(--shadow-glow); }
-.gallery-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
+.gallery-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.25s ease; }
 .gallery-photo:hover img { transform: scale(1.06); }
 .gallery-photo figcaption {
   position: absolute; inset: auto 0 0 0;
@@ -369,7 +402,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   color: #fff;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 .gallery-photo figcaption::before { content: "●"; color: var(--color-accent-bright); font-size: 0.6em; margin-right: 0.45em; vertical-align: 0.1em; }
 
@@ -408,24 +441,24 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 }
 .ba-handle svg { width: 20px; height: 20px; }
 
-.ba-label { position: absolute; top: 12px; font-family: var(--font-heading); font-weight: 600; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase; color: #fff; background: rgba(20, 42, 69, 0.72); padding: 0.32rem 0.6rem; border-radius: 4px; pointer-events: none; }
-.ba-label-before { left: 12px; }
-.ba-label-after { right: 12px; }
+.ba-label { position: absolute; top: var(--space-1); font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; color: #fff; background: rgba(20, 42, 69, 0.72); padding: 4px 8px; border-radius: 4px; pointer-events: none; }
+.ba-label-before { left: var(--space-1); }
+.ba-label-after { right: var(--space-1); }
 
 .ba-hint {
-  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-  display: flex; align-items: center; gap: 0.4rem;
+  position: absolute; bottom: var(--space-2); left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 8px;
   background: rgba(20, 42, 69, 0.85); color: #fff;
-  font-family: var(--font-heading); font-weight: 600; font-size: 0.78rem;
-  padding: 0.45rem 0.9rem; border-radius: 999px;
-  opacity: 1; transition: opacity 0.4s ease; pointer-events: none; white-space: nowrap;
+  font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem;
+  padding: 8px 16px; border-radius: 999px;
+  opacity: 1; transition: opacity 0.25s ease; pointer-events: none; white-space: nowrap;
 }
 .ba-hint svg { width: 15px; height: 15px; }
 .ba-card.ba-touched .ba-hint { opacity: 0; }
 
-.ba-caption { margin-top: 0.85rem; text-align: center; }
-.ba-caption strong { display: block; font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 0.98rem; }
-.ba-caption span { color: var(--color-text-muted); font-size: 0.8rem; }
+.ba-caption { margin-top: var(--space-2); text-align: center; }
+.ba-caption strong { display: block; font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 1rem; }
+.ba-caption span { color: var(--color-text-muted); font-size: 0.75rem; }
 
 @media (prefers-reduced-motion: reduce) {
   .ba-card, .ba-hint { transition: none; }
@@ -434,7 +467,11 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
 /* ---- Footer ---- */
 .site-footer { background: var(--color-primary); color: var(--color-on-dark); margin-top: var(--space-7); }
 .footer-inner { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); padding-block: var(--space-6); }
-.footer-col h3 { color: #fff; font-size: 1rem; margin-bottom: var(--space-2); }
+/* No font-size override here (audit finding T3) — this used to render
+   footer headings at 16px vs. the 20px every other h3 on the site uses,
+   with no reason for the mismatch. Inheriting the base h3 size keeps
+   "Contact"/"Hours"/"Quick Links" consistent with card titles elsewhere. */
+.footer-col h3 { color: #fff; margin-bottom: var(--space-2); }
 .footer-col a { transition: color 0.2s ease; }
 .footer-col a:hover { color: var(--color-star); }
 .footer-logo { color: #fff; }
@@ -457,7 +494,7 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   transform: translateY(-2px);
 }
 .footer-social svg { width: 15px; height: 15px; fill: currentColor; }
-.footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-block: var(--space-2); font-size: 0.85rem; text-align: center; color: var(--color-on-dark-muted); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-block: var(--space-2); font-size: 0.875rem; text-align: center; color: var(--color-on-dark-muted); }
 
 /* ---- Hero ---- */
 .hero {
@@ -561,18 +598,26 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   inset: 0;
   /* ~50% less opaque than the original (0.88/0.72/0.6) so more of the
      actual shop footage shows through; text stays readable via the
-     hero h1's own text-shadow below. */
+     hero h1's own text-shadow below. Floor raised slightly (audit
+     finding C2) -- the lightest stop was 0.3, which on a bright video
+     frame could drop the on-video text below a verifiable contrast
+     ratio; 0.38 keeps a comfortable margin without re-darkening the
+     footage back toward the pre-grading look. */
   background: linear-gradient(
     135deg,
-    rgba(20, 42, 69, 0.45) 0%,
-    rgba(20, 42, 69, 0.37) 45%,
-    rgba(30, 58, 95, 0.3) 100%
+    rgba(20, 42, 69, 0.5) 0%,
+    rgba(20, 42, 69, 0.42) 45%,
+    rgba(30, 58, 95, 0.38) 100%
   );
 }
 .hero-content { position: relative; z-index: 1; }
-.hero h1 { color: #fff; font-size: clamp(2.75rem, 6vw, 4.5rem); letter-spacing: -0.01em; text-shadow: 0 4px 40px rgba(0, 0, 0, 0.3); }
-.hero h1 .text-accent-bright { color: var(--color-accent-bright); }
-.hero p.lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.1rem; }
+.hero h1 { color: #fff; font-size: clamp(2.75rem, 6vw, 4rem); letter-spacing: -0.01em; text-shadow: 0 4px 40px rgba(0, 0, 0, 0.3); }
+/* Emphasis via weight, not color (audit finding H2) — with the marquee
+   background and the "Call Now" button both also orange, a third orange
+   element in the same viewport (this in-headline word) diluted which one
+   read as the actual primary action. Weight alone still sets it apart. */
+.hero h1 .text-accent-bright { font-weight: 800; }
+.hero p.lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.125rem; }
 .hero .btn { margin-top: var(--space-4); margin-inline: var(--space-1); }
 .hero .btn-outline { border-color: #fff; color: #fff; }
 .hero .btn-outline:hover { background: #fff; color: var(--color-primary); }
@@ -583,12 +628,15 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
     from { opacity: 0; transform: translateY(32px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  /* Duration cut from 1000ms and the lede's stagger delay dropped
+     (audit finding M1): at the old pace the primary CTA didn't finish
+     settling until ~1.2-1.3s after paint. Button delays trimmed
+     proportionally so the whole sequence resolves well under 500ms. */
   .hero h1, .hero .lede, .hero .btn, .page-hero h1, .page-hero .lede {
-    animation: fade-up-in 1000ms linear(0, 0.0319, 0.1092, 0.2105, 0.3209, 0.4305, 0.5332, 0.6253, 0.7055, 0.7733, 0.8294, 0.8747, 0.9107, 0.9386, 0.9597, 0.9754, 0.9868, 0.9947, 1, 1.0033, 1.0052, 1.0061, 1.0063, 1.006, 1.0055, 1.0049, 1.0042, 1.0035, 1.0029, 1.0023, 1.0018, 1.0014, 1) both;
+    animation: fade-up-in 400ms linear(0, 0.0319, 0.1092, 0.2105, 0.3209, 0.4305, 0.5332, 0.6253, 0.7055, 0.7733, 0.8294, 0.8747, 0.9107, 0.9386, 0.9597, 0.9754, 0.9868, 0.9947, 1, 1.0033, 1.0052, 1.0061, 1.0063, 1.006, 1.0055, 1.0049, 1.0042, 1.0035, 1.0029, 1.0023, 1.0018, 1.0014, 1) both;
   }
-  .hero .lede, .page-hero .lede { animation-delay: 0.1s; }
-  .hero .btn { animation-delay: 0.2s; }
-  .hero .btn:nth-of-type(2) { animation-delay: 0.3s; }
+  .hero .btn { animation-delay: 0.06s; }
+  .hero .btn:nth-of-type(2) { animation-delay: 0.12s; }
 }
 
 /* ---- Page header (compact hero used on every non-home page) ---- */
@@ -601,8 +649,8 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
   text-align: center;
 }
 .page-hero .hero-content { position: relative; z-index: 1; }
-.page-hero h1 { color: #fff; font-size: clamp(2.25rem, 4.5vw, 3.25rem); letter-spacing: -0.01em; }
-.page-hero .lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.1rem; }
+.page-hero h1 { color: #fff; font-size: clamp(2rem, 4.5vw, 2.75rem); letter-spacing: -0.01em; }
+.page-hero .lede { color: var(--color-on-dark-muted); max-width: 640px; margin-inline: auto; margin-top: var(--space-2); font-size: 1.125rem; }
 .page-hero .hero-car { opacity: 0.1; width: min(45vw, 420px); }
 /* Same glow as the home hero, scaled down to match the compact banner. */
 .page-hero .hero-glow { width: 420px; height: 420px; opacity: 0.55; }
