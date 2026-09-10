@@ -594,12 +594,15 @@ h3 { font-size: 1.25rem; margin-bottom: var(--space-1); }
     from { opacity: 0; transform: translateY(32px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  /* Duration cut from 1000ms and the lede's stagger delay dropped
+     (audit finding M1): at the old pace the primary CTA didn't finish
+     settling until ~1.2-1.3s after paint. Button delays trimmed
+     proportionally so the whole sequence resolves well under 500ms. */
   .hero h1, .hero .lede, .hero .btn, .page-hero h1, .page-hero .lede {
-    animation: fade-up-in 1000ms linear(0, 0.0319, 0.1092, 0.2105, 0.3209, 0.4305, 0.5332, 0.6253, 0.7055, 0.7733, 0.8294, 0.8747, 0.9107, 0.9386, 0.9597, 0.9754, 0.9868, 0.9947, 1, 1.0033, 1.0052, 1.0061, 1.0063, 1.006, 1.0055, 1.0049, 1.0042, 1.0035, 1.0029, 1.0023, 1.0018, 1.0014, 1) both;
+    animation: fade-up-in 400ms linear(0, 0.0319, 0.1092, 0.2105, 0.3209, 0.4305, 0.5332, 0.6253, 0.7055, 0.7733, 0.8294, 0.8747, 0.9107, 0.9386, 0.9597, 0.9754, 0.9868, 0.9947, 1, 1.0033, 1.0052, 1.0061, 1.0063, 1.006, 1.0055, 1.0049, 1.0042, 1.0035, 1.0029, 1.0023, 1.0018, 1.0014, 1) both;
   }
-  .hero .lede, .page-hero .lede { animation-delay: 0.1s; }
-  .hero .btn { animation-delay: 0.2s; }
-  .hero .btn:nth-of-type(2) { animation-delay: 0.3s; }
+  .hero .btn { animation-delay: 0.06s; }
+  .hero .btn:nth-of-type(2) { animation-delay: 0.12s; }
 }
 
 /* ---- Page header (compact hero used on every non-home page) ---- */
