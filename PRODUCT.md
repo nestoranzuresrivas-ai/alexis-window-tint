@@ -54,9 +54,8 @@ HTML files (no templating engine).
   truck, orange tractor) in the gallery, and a homepage hero background
   video (`videos/hero-tint.mp4`, tint application B-roll) with poster
   (`images/hero-poster.jpg`).
-- Facebook review link is still a placeholder
-  (`data-placeholder="facebook-url"` in about.html) — real URL not yet
-  provided.
+- Facebook review link is live in about.html
+  (https://www.facebook.com/share/1Bhx1ScgYz/?mibextid=wwXIfr).
 
 ## Brand Commitments
 
@@ -81,6 +80,13 @@ HTML files (no templating engine).
   — client-provided claims, not independently verified. Do not invent
   additional stats, testimonial quotes, case studies, or press.
 
+- Current visual identity ("tinted glass"): ink navy #0f2036 (header,
+  footer, dark bands), brand navy #1b3558, ember orange #c2410c as the
+  only accent (amber #fb923c on dark only), glass white #f6f8fb,
+  hairline #d9e0e8. Barlow Condensed headings (sentence case), Inter
+  body at 17px. 4px radius, flat cards, no glow shadows. One memorable
+  moment (hero + tint-reveal intro); everything else quiet.
+
 ## Product Principles
 
 1. Every page must still convert to a phone call — bolder visuals
@@ -98,5 +104,5 @@ HTML files (no templating engine).
 
 Established pattern (`js/animations.js`) already checks
 `prefers-reduced-motion` and shows all content fully visible without
-animation when set. New motion work (scroll reveals, count-up,
-marquee, hover effects) must extend this pattern, not bypass it.
+animation when set. New motion work (heading reveals, count-up, the
+home-page intro) must extend this pattern, not bypass it.

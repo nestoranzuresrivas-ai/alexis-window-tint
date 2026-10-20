@@ -31,8 +31,9 @@ gallery.html        Photo gallery (3 real jobs + placeholders)
 about.html          Experience + reviews
 contact.html        Address, phone, email, hours, map
 css/styles.css      All styles + design tokens (colors, fonts, spacing)
-js/script.js        Mobile nav toggle
-js/animations.js    Scroll reveals, count-up, hero-video reduced-motion guard (built on Motion)
+js/script.js        Mobile nav toggle, tint-reveal intro skip/cleanup
+js/animations.js    Heading reveals, count-up, hero-video reduced-motion guard (built on Motion)
+js/before-after.js  Before/after drag-compare sliders (home page)
 js/vendor/motion.js Vendored copy of the Motion animation library (motion.dev)
 images/             Photo assets go here
 videos/             Hero background video (all six pages)
@@ -40,17 +41,47 @@ videos/             Hero background video (all six pages)
 
 ### Animations
 
-`js/animations.js` adds subtle scroll-triggered fade/rise reveals and a
-small spring "pop" on the primary call-to-action buttons, using the
-[Motion](https://motion.dev) library. Motion is vendored locally as a
-single file at `js/vendor/motion.js` rather than fetched from a CDN, so
-the site has no runtime network dependency and no build step. To
-upgrade it, replace that file with a fresh build from
+Motion is deliberately minimal ("premium means restrained"). What moves:
+
+- **Hero load-in** — pure CSS (`fade-up-in` in `css/styles.css`).
+- **Count-up numbers** — the hero's "tinted glass" stat bar counts up on
+  load (it's already in view); the About page's stats count up when
+  scrolled into view.
+- **Before/after sliders** — `js/before-after.js`.
+- **Section headings** — a short 16px rise as they scroll in.
+
+Nothing else animates: no card slide-ins, hover lifts, or button springs.
+`js/animations.js` uses the [Motion](https://motion.dev) library, vendored
+locally at `js/vendor/motion.js` (no CDN, no build step). To upgrade it,
+replace that file with a fresh build from
 `https://cdn.jsdelivr.net/npm/motion@<version>/+esm`.
 
 Everything in `animations.js` checks `prefers-reduced-motion` first and
 does nothing if the visitor has that preference set — content is always
 fully visible without it.
+
+### Tint-reveal intro (home page)
+
+On the first home-page load per browser session, an ink-navy layer with
+the logo and a thin orange line covers the page for ~1.2s, then slides up
+(~600ms) to reveal the hero. It is:
+
+- decided by a tiny inline script in `index.html`'s `<head>` (adds
+  `intro-active` to `<html>` before first paint, so the site never flashes
+  first) using `sessionStorage` key `awt-intro-seen`;
+- run entirely by CSS (`.intro-layer` in `css/styles.css`) — the page
+  loads and renders underneath as normal;
+- skippable by tapping or pressing any key (`js/script.js`);
+- skipped entirely with `prefers-reduced-motion` or once seen this session.
+
+To replay it while testing, run `sessionStorage.clear()` in the console and
+reload.
+
+### Mobile call/text bar
+
+At 700px and below every page shows a fixed bottom bar (`.mobile-cta-bar`)
+with "Call now" (`tel:19035030115`) and "Text us" (`sms:+19035030115`).
+`body` gets matching bottom padding so it never covers the footer.
 
 There's no templating system — each `.html` file repeats the same
 header/nav and footer markup. When you change something shared (a
@@ -88,17 +119,14 @@ Edit the two tables in `pricing.html` directly — one for Standard
 Lifetime Warranty Film, one for Ceramic Lifetime Warranty Film. Each
 row is a plain `<tr><td>Item</td><td>$Price</td></tr>`.
 
-## Adding the real Facebook link
+## Facebook reviews link
 
-`about.html` has one placeholder link:
-
-```html
-<a href="#" data-placeholder="facebook-url">See our reviews on Facebook</a>
-```
-
-Replace `href="#"` with the real Facebook page URL (you can leave the
-`data-placeholder` attribute or remove it — it's just there so this
-spot is easy to find with a search).
+`about.html`'s "See our reviews on Facebook" button links to the real
+Facebook page (opens in a new tab). The same URL is used in every page's
+header/footer social icons and in the `AutomotiveBusiness` JSON-LD in
+`index.html`'s `<head>` — update all of them if it changes. That JSON-LD
+block also carries the phone, address, and hours, so keep it in sync with
+the footer.
 
 ## The real logo
 
@@ -114,7 +142,7 @@ and knife graphic cropped off) next to the text wordmark:
 `.logo-mark` (in `css/styles.css`) fixes its height at 34px with a
 small rounded corner and hairline ring, so the badge's busier
 black/orange/gold artwork stays contained next to the site's own
-navy/blue wordmark instead of dominating the header. `alt=""` because
+wordmark instead of dominating the header. `alt=""` because
 the adjacent text already names the business — update it if the badge
 is ever used somewhere without that text nearby.
 
@@ -172,11 +200,9 @@ even at a lower CRF the result lands close to the original file size.
 graded, encoded file (`ffmpeg -ss 5 -i videos/hero-tint.mp4 -frames:v 1
 -q:v 3 images/hero-poster.jpg`), so it matches exactly what plays.
 
-`.hero-video` (in `css/styles.css`) swaps out the old gradient/stripe
-/glow/grain treatment — plus the placeholder car-silhouette backdrop
-on the five page banners — for the video plus a semi-transparent navy
-gradient overlay for text contrast; the text/CTA layout and existing
-fade-up-in animation are unchanged. `js/animations.js` pauses the
+`.hero-video-overlay` (in `css/styles.css`) lays a left-to-right ink-navy
+gradient over the video — dark behind the left-aligned headline, clearing
+to the right so the footage shows through. `js/animations.js` pauses the
 video and drops its `autoplay` attribute for `prefers-reduced-motion`
 visitors on whichever page it's on (a declarative HTML attribute like
 `autoplay` can't be stopped by CSS alone) — see the "Viewing the site"
