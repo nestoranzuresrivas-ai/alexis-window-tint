@@ -1,7 +1,7 @@
-// Count-up stat numbers and a subtle reveal on section headings, built with
-// Motion (vendored in js/vendor/motion.js). Motion is deliberately kept
-// minimal: the hero load-in is pure CSS, the before/after sliders live in
-// before-after.js, and nothing else moves.
+// Count-up stat numbers, built with Motion (vendored in js/vendor/motion.js),
+// plus the hero-video reduced-motion guard. Other motion lives elsewhere:
+// hero load-in and parallax are pure CSS, scroll reveals are in
+// scroll-motion.js, and the before/after sliders are in before-after.js.
 // Respects prefers-reduced-motion: if the visitor asked for reduced motion,
 // this file does nothing and every element/number stays at its normal,
 // final, visible state.
@@ -57,8 +57,6 @@ function countUpOnce(el) {
 }
 
 if (!prefersReducedMotion) {
-  const ease = [0.16, 1, 0.3, 1];
-
   // --- Hero stat bar: already in view on load, so count up right away —
   // or, while the tint-reveal intro is covering the page, as soon as it lifts.
   const heroCounters = document.querySelectorAll(".hero-stats [data-countup]");
@@ -74,14 +72,5 @@ if (!prefersReducedMotion) {
   // --- Other stat numbers (about page): count up when scrolled into view.
   document.querySelectorAll(".trust-bar").forEach((bar) => {
     revealOnce(bar, () => bar.querySelectorAll("[data-countup]").forEach(countUpOnce));
-  });
-
-  // --- Section headings: a short 16px rise.
-  document.querySelectorAll("main .section h2").forEach((el) => {
-    el.style.opacity = "0";
-    el.style.transform = "translateY(16px)";
-    revealOnce(el, (element) => {
-      animate(element, { opacity: [0, 1], y: [16, 0] }, { duration: 0.35, ease });
-    });
   });
 }

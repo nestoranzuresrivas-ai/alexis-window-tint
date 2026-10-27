@@ -32,7 +32,8 @@ about.html          Experience + reviews
 contact.html        Address, phone, email, hours, map
 css/styles.css      All styles + design tokens (colors, fonts, spacing)
 js/script.js        Mobile nav toggle, tint-reveal intro skip/cleanup
-js/animations.js    Heading reveals, count-up, hero-video reduced-motion guard (built on Motion)
+js/scroll-motion.js Scroll reveals (IntersectionObserver, no library)
+js/animations.js    Count-up, hero-video reduced-motion guard (built on Motion)
 js/before-after.js  Before/after drag-compare sliders (home page)
 js/vendor/motion.js Vendored copy of the Motion animation library (motion.dev)
 images/             Photo assets go here
@@ -48,16 +49,24 @@ Motion is deliberately minimal ("premium means restrained"). What moves:
   load (it's already in view); the About page's stats count up when
   scrolled into view.
 - **Before/after sliders** — `js/before-after.js`.
-- **Section headings** — a short 16px rise as they scroll in.
+- **Scroll reveals** — `js/scroll-motion.js`: section content, cards, and
+  images fade in and rise 24px (650ms, ease-out) once as they enter the
+  viewport; grid items stagger by 80ms. IntersectionObserver only, no
+  scroll listeners or libraries, opacity/transform only (no layout
+  shift). The script hides only elements that start below the viewport,
+  so content is always visible if JS is off or fails.
+- **Hero parallax** — the home hero video drifts up to 20px as you scroll,
+  via CSS scroll-driven animation (`animation-timeline: scroll()`).
+  Browsers without support just get a static hero; there is no JS
+  fallback.
 
-Nothing else animates: no card slide-ins, hover lifts, or button springs.
-`js/animations.js` uses the [Motion](https://motion.dev) library, vendored
+No hover lifts or button springs. `js/animations.js` uses the [Motion](https://motion.dev) library, vendored
 locally at `js/vendor/motion.js` (no CDN, no build step). To upgrade it,
 replace that file with a fresh build from
 `https://cdn.jsdelivr.net/npm/motion@<version>/+esm`.
 
-Everything in `animations.js` checks `prefers-reduced-motion` first and
-does nothing if the visitor has that preference set — content is always
+Everything in `animations.js` and `scroll-motion.js` (and the parallax
+CSS) checks `prefers-reduced-motion` first and does nothing if the visitor has that preference set — content is always
 fully visible without it.
 
 ### Tint-reveal intro (home page)
